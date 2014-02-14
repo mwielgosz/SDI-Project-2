@@ -90,6 +90,34 @@ var performSledRace = function(numRaces) {
     return userWins;
 };
 
+/* Function to combine strings to display final race results
+ *
+ * @param possibleOutcomes:
+ *      0 - Congratulations
+ *      1 - I'm sorry
+ *      2 - you've won
+ *      3 - you've lost because
+ *      4 - we've tied because
+ *      5 - out of
+ *      6 - races!
+ */
+var outputFinalResults = function(friendName, raceOutcome) {
+    var raceResults = "",
+        possibleOutcomes = raceOutcome.split("~");
+
+    if (numberOfUserWins > (numberOfRaces / 2)) {
+        // User wins
+        raceResults = possibleOutcomes[0].concat(friendName, possibleOutcomes[2], numberOfUserWins, possibleOutcomes[5], numberOfRaces, possibleOutcomes[6]);
+    } else if (numberOfUserWins < (numberOfRaces / 2)) {
+        // User loses
+        raceResults = possibleOutcomes[1].concat(friendName, possibleOutcomes[3], possibleOutcomes[2], numberOfUserWins, possibleOutcomes[5], numberOfRaces, possibleOutcomes[6]);
+    } else {
+        // Tie
+        raceResults = friendName.concat(possibleOutcomes[4], possibleOutcomes[2], numberOfUserWins, possibleOutcomes[5], numberOfRaces, possibleOutcomes[6]);
+    }
+    return raceResults;
+};
+
 console.log("Hello there! My name is " + myName + " and I see that you're sledding alone. Come join me!");
 userName = prompt("I've been looking for someone to race all day. What is your full name?", userName);
 greetFriend(userName);
@@ -101,5 +129,8 @@ multipleRaces = confirmNumberOfRaces(multipleRaces, maxSledRaces);
 
 console.log("Well, we're at the top of the hill. This is going to be one heck of a sled ride!\nLet's Race!");
 
+// Calculate race results
 numberOfUserWins = performSledRace(numberOfRaces);
-console.log("\n" + userName + ", you won " + numberOfUserWins + " out of " + numberOfRaces + " races!");
+
+// Concatenate race output for console display
+console.log("\n" + outputFinalResults(userName, "Congratulations ~I'm sorry ~ you've won ~ you've lost because~, we've tied because~ out of ~ races!"));
